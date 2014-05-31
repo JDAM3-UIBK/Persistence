@@ -1,4 +1,4 @@
-package at.compare.init;
+package notused;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -8,6 +8,8 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import at.compare.init.WebAppConfig;
 
 public class Initizialisierer implements WebApplicationInitializer{
 	
