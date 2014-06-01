@@ -38,7 +38,7 @@ public class UserManagement {
 	     if (user == null) {
 	         return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
 	     }
-	  
+	     
 	     return new ResponseEntity<String>(user.toJson(), headers, HttpStatus.OK);
 	 }
 	 
@@ -53,16 +53,16 @@ public class UserManagement {
 		 //Check, if User already exists
 		 User userTmp = userService.findByNameId(userClient.getUser_name_id());
 		 
-		 if(userTmp == null){
-			 return new ResponseEntity<String>(" User Not Found! " ,headers, HttpStatus.NOT_FOUND);
+		 if(userTmp != null){
+			 return new ResponseEntity<String>(" User is already Registered! " ,headers, HttpStatus.NOT_ACCEPTABLE);
 		 }
 		 
-		 if(userTmp.getUser_name_id().compareTo(userClient.getUser_name_id())!=0){
-			 User userDB = userService.insert(userClient);
-			 return new ResponseEntity<String>(userDB.toJson(),headers,HttpStatus.OK);
+		
+		 User userDB = userService.insert(userClient);
+		 return new ResponseEntity<String>(userDB.toJson(),headers,HttpStatus.OK);
 			 	 
-		 }
-		 return new ResponseEntity<String>(" User is already Registered! " ,headers, HttpStatus.NOT_ACCEPTABLE);	 
+		
+		 	 
 		 
 	 }
 	 
