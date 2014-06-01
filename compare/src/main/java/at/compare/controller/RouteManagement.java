@@ -1,6 +1,7 @@
 package at.compare.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,17 +94,33 @@ public class RouteManagement {
 		 return new ResponseEntity<String>(LoggedRoute.toJsonArray(routeDBList), headers, HttpStatus.OK);
 		 
 	}
-	@RequestMapping(value="/deleteRouteById", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> deleteRouteById(@RequestBody String routeJson){ 
+	@RequestMapping(value="/deleteRoute", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<String> deleteRoute(@RequestBody String routeJson){ 
 		
 		 HttpHeaders headers = new HttpHeaders();
 	     headers.add("Content-Type", "application/json; charset=utf-8");
-	     /*
+	     
 		 LoggedRoute routeClient = new JSONDeserializer<LoggedRoute>().deserialize(routeJson, LoggedRoute.class );
 		 
-		 LoggedRoute routeDB = null;
+		 List<LoggedRoute> routeTmpList =  routeService.findByUsername(routeClient.getUserName()); 
+		 
+		 if(routeTmpList == null){
+				return new ResponseEntity<String>(" Route not found!* ", headers, HttpStatus.NOT_FOUND);
+		 }
+		 
+		LoggedRoute route = null; 
+		for(LoggedRoute tmp: routeTmpList){
+			if((tmp.getDate().compareTo(routeClient.getDate()))==0){
+				route = tmp;
+			}
+		}
+		if(route == null){
+			return new ResponseEntity<String>(" Route not found!** ", headers, HttpStatus.NOT_FOUND);
+		}
+		 
+		LoggedRoute routeDB = null;
 		try {
-			routeDB = routeService.delete(routeClient.getId());
+			routeDB = routeService.delete(route.getId());
 		} catch (RouteNotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -114,8 +131,36 @@ public class RouteManagement {
 		 }
 		 
 		 return new ResponseEntity<String>(routeDB.toJson(), headers, HttpStatus.OK);
-		 */
-	     return new ResponseEntity<String>(" NOT IMPLEMENTED!! ", headers, HttpStatus.NOT_FOUND);
+		
+	     //return new ResponseEntity<String>(" NOT IMPLEMENTED!! ", headers, HttpStatus.NOT_FOUND);
+	}
+	
+	@RequestMapping(value="/deleteRoutesWithUsername", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<String> deleteRoutesWithUsername(@RequestBody String routeJson){ 
+		
+		 HttpHeaders headers = new HttpHeaders();
+	     headers.add("Content-Type", "application/json; charset=utf-8");
+	     
+		 LoggedRoute routeClient = new JSONDeserializer<LoggedRoute>().deserialize(routeJson, LoggedRoute.class );
+		 
+		 List<LoggedRoute> routeTmpList =  routeService.findByUsername(routeClient.getUserName()); 
+		 if(routeTmpList == null){
+				return new ResponseEntity<String>(" Route not found! ", headers, HttpStatus.NOT_FOUND);
+		 }
+		 
+		for(LoggedRoute tmp: routeTmpList){
+			
+			try {
+				routeService.delete(tmp.getId());
+			} catch (RouteNotFound e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+			}
+		}
+ 
+		 return new ResponseEntity<String>("Deleted Routes of User: " + routeClient.getUserName(), headers, HttpStatus.OK);
+		
+	    
 	}
 	/*
 	@RequestMapping(value="/showCO2", method = RequestMethod.POST)
