@@ -34,4 +34,55 @@ RouteRepository:
 	 */
 	//@Query("select r.id from loggedroute r where r.userName = :username")
 	//public Long findRouteIdByUsername(@Param("username") String username);
+
+
+UserManagement:
+	
+	/*
+	// Bsp: http://localhost:8080/cp414/autoid?id=2 
+	@RequestMapping(value="/create", method=RequestMethod.GET)
+	public @ResponseBody String create(
+							@RequestParam(value="username", required=true)String username,
+							@RequestParam(value="password", required=true )String password
+							){
+		User user = new User();
+		user.setUser_name_id(username);
+		user.setUser_pw(password);
+		
+		userService.insert(user);
+		
+		return "User: " + username + " successfully created";
+	}
+	
+
+	 @RequestMapping(value = "/createPost", method = RequestMethod.POST)
+	 public @ResponseBody String createPost(@RequestParam("json") String json,
+			 								@RequestBody String json2
+			 								) {
+		 									
+		 //System.out.println("Received POST request:" + json);
+    	
+	     return json;
+	 }
+	//http://docs.spring.io/spring-roo/reference/html/base-json.html
 	 
+	 @RequestMapping(method = RequestMethod.POST)
+	 public @ResponseBody User compareUser(@RequestBody String userJson) throws UserNotFound {						
+		 //System.out.println("Received POST request:" + json);
+	
+		 User userClient = new JSONDeserializer<User>().deserialize(userJson, User.class );
+		 //search for User, if it exists
+		 User userDB = userService.findByNameId(userClient.getUser_name_id());
+		 
+		 if(userDB == null){
+			 
+			 throw new UserNotFound();	 
+		 }
+		 if(userClient.getUser_pw().compareTo(userDB.getUser_pw()) != 0){
+			 userDB = null;
+		 }
+		 
+		 return userDB;
+		 
+	 }
+	 */

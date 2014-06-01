@@ -29,7 +29,7 @@ public class RouteManagement {
 	@Autowired
 	UserService userService;
 	
-	@RequestMapping(value="/id", method=RequestMethod.GET)
+	@RequestMapping(value="/id", method=RequestMethod.POST)
 	public @ResponseBody LoggedRoute id(@RequestParam(value="id", required=false, defaultValue="1" )Long id) throws RouteNotFound{
 		
 		LoggedRoute route = routeService.findById(id);
@@ -43,7 +43,7 @@ public class RouteManagement {
 		
 	}
 	
-	@RequestMapping(value="/username", method=RequestMethod.GET)
+	@RequestMapping(value="/username", method=RequestMethod.POST)
 	public @ResponseBody LoggedRoute username(@RequestParam(value="username", required=false, defaultValue="tobi11" )String username) throws RouteNotFound{
 		
 		List<LoggedRoute> route = routeService.findByUsername(username);

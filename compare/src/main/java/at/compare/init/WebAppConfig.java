@@ -22,8 +22,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 
 @Configuration
-@ComponentScan("at.compare")
 @EnableWebMvc
+@ComponentScan("at.compare")
 @EnableJpaRepositories("at.compare.repository")
 public class WebAppConfig extends WebMvcConfigurerAdapter{
 	
