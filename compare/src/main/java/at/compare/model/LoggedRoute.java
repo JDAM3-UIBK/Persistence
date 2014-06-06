@@ -1,13 +1,13 @@
 package at.compare.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import flexjson.JSONSerializer;
 
 /**
@@ -151,4 +151,7 @@ public class LoggedRoute implements Serializable{
     public String toJson() {
 		   return new JSONSerializer().exclude("*.class").serialize(this);
 	}
+    public static String toJsonArray(Collection<LoggedRoute> collection) {
+ 	   return new JSONSerializer().exclude("*.class").serialize(collection);
+ }
 }
