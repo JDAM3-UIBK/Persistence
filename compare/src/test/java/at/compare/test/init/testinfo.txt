@@ -1,0 +1,69 @@
+@RunWith(SpringJUnit4ClassRunner.class)
+// specifies the Spring configuration to load for this test fixture
+@ContextConfiguration("repository-config.xml")
+public class HibernateTitleRepositoryTests {
+
+    // this instance will be dependency injected by type
+    @Autowired
+    private HibernateTitleRepository titleRepository;
+
+    @Test
+    public void findById() {
+        Title title = titleRepository.findById(new Long(10));
+        assertNotNull(title);
+    }
+}
+
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration("test-servlet-context.xml")
+public class ExampleTests {
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    }
+
+    @Test
+    public void getAccount() throws Exception {
+        this.mockMvc.perform(get("/accounts/1").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+          .andExpect(status().isOk())
+          .andExpect(content().contentType("application/json"))
+          .andExpect(jsonPath("$.name").value("Lee"));
+    }
+
+}
+
+Transaction Testing:
+@ContextConfiguration
+@TransactionConfiguration(transactionManager = "txMgr", defaultRollback = false)
+public class CustomConfiguredTransactionalTests {
+    // class body...
+}
+
+Context management and caching
+
+The Spring TestContext Framework provides consistent loading of Spring ApplicationContexts and WebApplicationContexts as well as caching of those contexts. 
+Support for the caching of loaded contexts is important, because startup time can become an issue — not because of the overhead of Spring itself, 
+but because the objects instantiated by the Spring container take time to instantiate. For example, a project with 50 to 100 Hibernate mapping files might take 10 to 20 seconds to load the mapping files, 
+and incurring that cost before running every test in every test fixture leads to slower overall test runs that reduce developer productivity.
+
+Test classes typically declare either an array of resource locations for XML configuration metadata — often in the classpath — 
+or an array of annotated classes that is used to configure the application. These locations or classes are the same as or similar to those specified in web.xml or other deployment configuration files.
+
+By default, once loaded, the configured ApplicationContext is reused for each test. Thus the setup cost is incurred only once per test suite, and subsequent test execution is much faster. In this context, 
+the term test suite means all tests run in the same JVM — for example, all tests run from an Ant, Maven, or Gradle build for a given project or module. 
+In the unlikely case that a test corrupts the application context and requires reloading — for example, 
+by modifying a bean definition or the state of an application object — the TestContext framework can be configured to reload the configuration and 
+rebuild the application context before executing the next test.
+
+See the section called “Context management” and the section called “Context caching” with the TestContext framework.
