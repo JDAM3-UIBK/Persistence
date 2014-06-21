@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.HttpHeaders;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import at.compare.model.LoggedRoute;
+import at.compare.model.LoggedRouteValidator;
 
 
 
@@ -74,5 +78,12 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 		resolver.setSuffix(".jsp");
 		return resolver;
 	}
+	@Bean
+	public HttpHeaders headers(){
+		HttpHeaders tmp = new HttpHeaders();
+		tmp.add("Content-Type", "application/json; charset=utf-8");
+		return tmp;
+	}
+	
 	
 }

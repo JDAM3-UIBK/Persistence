@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import flexjson.JSONSerializer;
+
 
 @Entity
 @Table(name = "auto")
@@ -84,6 +86,8 @@ public class Auto {
 			return "Auto [id:" + id + ", model:" + model + ", co2verbrauch:"
 					+ co2verbrauch + ", treibstoff:" + treibstoff + "]";
 	}
-	
+	public String toJson() {
+		   return new JSONSerializer().exclude("*.class").serialize(this);
+	}
 	
 }

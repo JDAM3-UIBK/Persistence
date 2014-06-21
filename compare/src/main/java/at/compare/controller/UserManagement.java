@@ -36,7 +36,7 @@ public class UserManagement {
 	     headers.add("Content-Type", "application/json; charset=utf-8");
 	   
 	     if (user == null) {
-	         return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+	         return new ResponseEntity<String>(headers, HttpStatus.BAD_REQUEST);
 	     }
 	     
 	     return new ResponseEntity<String>(user.toJson(), headers, HttpStatus.OK);
@@ -47,7 +47,7 @@ public class UserManagement {
 		 
 		 HttpHeaders headers = new HttpHeaders();
 	     headers.add("Content-Type", "application/json; charset=utf-8");
-		 
+		  
 		 User userClient = new JSONDeserializer<User>().deserialize(userJson, User.class );
 		 
 		 //Check, if User already exists
@@ -57,11 +57,12 @@ public class UserManagement {
 			 return new ResponseEntity<String>(" User is already Registered! " ,headers, HttpStatus.NOT_ACCEPTABLE);
 		 }
 		 
-		
+		 
 		 User userDB = userService.insert(userClient);
-		 return new ResponseEntity<String>(userDB.toJson(),headers,HttpStatus.OK);
-			 	 
-		
+		 if(userDB != null){
+			 return new ResponseEntity<String>(userDB.toJson(),headers,HttpStatus.OK);
+		 }	 	 
+		 return new ResponseEntity<String>("Error: Creating User!",headers,HttpStatus.BAD_REQUEST);
 		 	 
 		 
 	 }
@@ -78,11 +79,11 @@ public class UserManagement {
 		 User userDB = userService.findByNameId(userClient.getUser_name_id());
 		 
 		 if(userDB == null){
-			 return new ResponseEntity<String>(" User Not Found! " ,headers, HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<String>(" User Not Found! " ,headers, HttpStatus.BAD_REQUEST);
 		 }
 		 
 		 if(userClient.getUser_pw().compareTo(userDB.getUser_pw()) != 0){
-			 return new ResponseEntity<String>(" Password or User wrong!! ", headers, HttpStatus.NOT_FOUND);
+			 return new ResponseEntity<String>(" Password or User wrong!! ", headers, HttpStatus.BAD_REQUEST);
 		 }
 		
 	         
@@ -113,7 +114,6 @@ public class UserManagement {
 				e.printStackTrace();
 		 }
 		
-		
 		 
 		 return new ResponseEntity<String>(userDB.toJson(),headers,HttpStatus.OK);
 	 }
@@ -139,7 +139,7 @@ public class UserManagement {
 			 }
 		 }
 		 */
-		 return new ResponseEntity<String>(" NOT IMPLEMENTED!! ", headers, HttpStatus.NOT_FOUND);
+		 return new ResponseEntity<String>(" NOT IMPLEMENTED!! ", headers, HttpStatus.NOT_IMPLEMENTED);
 	 }
 	 
 }

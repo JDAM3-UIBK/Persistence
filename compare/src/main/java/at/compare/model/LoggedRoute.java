@@ -4,10 +4,15 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import flexjson.JSONSerializer;
 
 /**
@@ -28,13 +33,18 @@ public class LoggedRoute implements Serializable{
  	@GeneratedValue
 	private Long id;
     
+ 	@Column(nullable = false)
     private String userName; 
+ 	
     private int duration;
     private int length;
     private String type;
     private double CO2;
     private double costs;
+    
+    @Column(nullable = false)
     private Date date;
+    
     private int referencelength;
     private double referenceco2;
     private double referencecosts;
