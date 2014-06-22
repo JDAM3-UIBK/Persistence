@@ -83,6 +83,10 @@ public class WebAppConfigTest extends WebMvcConfigurerAdapter{
 	    
 	}
 	
+	/**
+	 * Manager for Entity interaction with Database
+	 * @return JpaTransactionManager txManager
+	 */
 	 @Bean
 	 public PlatformTransactionManager transactionManager() {
 
@@ -90,12 +94,18 @@ public class WebAppConfigTest extends WebMvcConfigurerAdapter{
 	    txManager.setEntityManagerFactory(entityManagerFactory());
 	    return txManager;
 	 }
-	
+	 /**
+	  * Important, without Hibernate does not work
+	  * @return HibernateExceptionTranslator
+	  */
 	 @Bean 
 	 public HibernateExceptionTranslator hibernateExceptionTranslator(){ 
 	      return new HibernateExceptionTranslator(); 
 	 }
-
+	 /**
+		 * Path to JSP Directory
+		 * @return ViewResolver 
+		 */
 	@Bean
 	public ViewResolver getViewResolver(){
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
