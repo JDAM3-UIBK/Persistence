@@ -6,10 +6,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import at.compare.exception.UserNotFound;
 import at.compare.model.Auto;
-import at.compare.model.User;
+
 import at.compare.repository.AutoRepository;
 
 @Service

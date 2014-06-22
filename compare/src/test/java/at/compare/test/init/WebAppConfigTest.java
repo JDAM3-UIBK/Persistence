@@ -1,4 +1,4 @@
-package at.compare.init;
+package at.compare.test.init;
 
 
 import javax.persistence.EntityManagerFactory;
@@ -27,7 +27,10 @@ import at.compare.model.LoggedRouteValidator;
  * Spring MVC Framework Configuration for Data Access from and to Database
  * ComponentScan looks in Packages for Controllers
  * EnableJpaRepositories looks for repositories 
- * In Repositories Data from Database is saved 
+ * In Repositories Data from Database is saved
+ * !!!Only for Testing!!!
+ * Original at:
+ * @see at.compare.init.WebAppConfig 
  * 
  * @author Joachim Rangger
  */
@@ -36,7 +39,7 @@ import at.compare.model.LoggedRouteValidator;
 @EnableWebMvc
 @ComponentScan("at.compare")
 @EnableJpaRepositories("at.compare.repository")
-public class WebAppConfig extends WebMvcConfigurerAdapter{
+public class WebAppConfigTest extends WebMvcConfigurerAdapter{
 	
 	/**
 	 * Initialize Connection to Database
@@ -45,11 +48,12 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 	@Bean
     public DataSource dataSource() {
         
+		
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost/comparedb");
-        dataSource.setUsername("compare");
-        dataSource.setPassword("jdam");
+        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+        dataSource.setUrl("jdbc:hsqldb:mem:butterfly");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
         
         return dataSource;
     }
@@ -62,6 +66,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 	 * 
 	 * @return EntityManagerFactory factory.getObject()
 	 */
+	
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 
@@ -89,7 +94,6 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 	    txManager.setEntityManagerFactory(entityManagerFactory());
 	    return txManager;
 	 }
-	 
 	 /**
 	  * Important, without Hibernate does not work
 	  * @return HibernateExceptionTranslator
@@ -98,11 +102,10 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 	 public HibernateExceptionTranslator hibernateExceptionTranslator(){ 
 	      return new HibernateExceptionTranslator(); 
 	 }
-	
-	/**
-	 * Path to JSP Directory
-	 * @return ViewResolver 
-	 */
+	 /**
+		 * Path to JSP Directory
+		 * @return ViewResolver 
+		 */
 	@Bean
 	public ViewResolver getViewResolver(){
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();

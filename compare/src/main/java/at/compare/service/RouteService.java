@@ -4,7 +4,11 @@ import java.util.List;
 import at.compare.exception.RouteNotFound;
 import at.compare.model.LoggedRoute;
 
-
+/**
+ * Route Service Interface
+ * @author Joachim Rangger
+ * 
+ */
 public interface RouteService {
 	
 	public LoggedRoute insert(LoggedRoute route);

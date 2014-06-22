@@ -1,14 +1,15 @@
 package at.compare.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
-
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,41 +18,73 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import flexjson.JSONDeserializer;
 import at.compare.exception.RouteNotFound;
-import at.compare.exception.UserNotFound;
 import at.compare.model.LoggedRoute;
-import at.compare.model.User;
+import at.compare.model.LoggedRouteValidator;
 import at.compare.service.RouteService;
 import at.compare.service.UserService;
+
+/**
+ * Serveraddress:8080/routemanagement
+ * @author Joachim Rangger
+ * 
+ */
 
 @Controller
 @RequestMapping(value="/routemanagement")
 public class RouteManagement {
 	
+	/**
+	 * Route Service - manages Route to and from Database
+	 * @see at.compare.service.RouteService
+	 */
 	@Autowired
 	RouteService routeService;
 	
+	/**
+	 * User Service - manages User to and from Database
+	 * @see at.compare.service.UserService
+	 */
 	@Autowired
 	UserService userService;
 	
+	/**
+	 * Json HttpHeader
+	 * @see at.compare.init.WebAppConfig#headers()
+	 */	
+	@Autowired
+	HttpHeaders headers;
+	
+	/**
+	  * Functionality: find Route = Find Route in Database with id
+	  * Serveraddress:8080/routemanagement/findRouteWithId
+	  * 
+	  * @param id - Request from Client with value="id"- RequestMethod = POST/GET
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  */
 	@RequestMapping(value="/findRouteWithId")
-	public @ResponseBody ResponseEntity<String> id(@RequestParam(value="id", required=false, defaultValue="1" )Long id) throws RouteNotFound{
-		HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Type", "application/json; charset=utf-8");
+	public @ResponseBody ResponseEntity<String> id(@RequestParam(value="id", required=false, defaultValue="1" )Long id){
 		
-		LoggedRoute route = routeService.findById(id);
+		LoggedRoute loggedRoute = routeService.findById(id);
 		
-		if((userService.findByNameId(route.getUserName())) == null){
+		if(loggedRoute == null){
+			return new ResponseEntity<String>(" User not Found! ", headers, HttpStatus.NOT_FOUND);
+		}
+		
+		if((userService.findByNameId(loggedRoute.getUserName())) == null){
 			return new ResponseEntity<String>(" User not Registered! ", headers, HttpStatus.BAD_REQUEST);
 		}
 
-		return new ResponseEntity<String>(route.toJson(), headers, HttpStatus.OK);
+		return new ResponseEntity<String>(loggedRoute.toJson(), headers, HttpStatus.OK);
 	}
-	
+	/**
+	  * Functionality: find Route = Find Route in Database with username
+	  * Serveraddress:8080/routemanagement/username
+	  * 
+	  * @param username - String request from Client - RequestMethod = POST
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  */
 	@RequestMapping(value="/username", method=RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> username(@RequestBody String username) throws RouteNotFound{
-		
-		HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Type", "application/json; charset=utf-8");
+	public @ResponseBody ResponseEntity<String> username(@RequestBody String username){
 		
 		List<LoggedRoute> routeDBList = routeService.findByUsername(username);
 		
@@ -62,49 +95,78 @@ public class RouteManagement {
 		return new ResponseEntity<String>(LoggedRoute.toJsonArray(routeDBList), headers, HttpStatus.OK);
 		
 	}
+	/**
+	  * Functionality: save Route = save Route to Database 
+	  * Serveraddress:8080/routemanagement/saveRoute
+	  * 
+	  * @param routeJson - JsonString request from Client - RequestMethod = POST
+	  * @param routeClient  LoggedRouteValidator  @see at.compare.model.LoggedRouteValidator  
+	  *
+	  * @param result for Validation Error handling 
+	  * 
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * 
+	  */
+	
 	@RequestMapping(value="/saveRoute", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> saveRoute(@RequestBody String routeJson){
-		 HttpHeaders headers = new HttpHeaders();
-	     headers.add("Content-Type", "application/json; charset=utf-8");
+	public @ResponseBody ResponseEntity<String> saveRoute( @RequestBody String routeJson, 
+																@Valid LoggedRoute routeClient, BindingResult result ){
 		
-		 LoggedRoute routeClient = new JSONDeserializer<LoggedRoute>().deserialize(routeJson, LoggedRoute.class ); 
-		
-		 LoggedRoute routeDB = routeService.insert(routeClient);
-		 if(routeDB == null){
-			 return new ResponseEntity<String>(" Route not Saved! ", headers, HttpStatus.BAD_REQUEST);
+		 routeClient = new JSONDeserializer<LoggedRoute>().deserialize(routeJson, LoggedRoute.class ); 
+		 new LoggedRouteValidator().validate(routeClient, result);
+		 if(result.hasErrors()){
+			 return new ResponseEntity<String>("Username too short! ", headers, HttpStatus.NOT_ACCEPTABLE);
+		 }
+		 if(userService.findByNameId(routeClient.getUserName())== null){
+			 return new ResponseEntity<String>("Wrong Username! ", headers, HttpStatus.BAD_REQUEST);
 		 }
 		 
-		 return new ResponseEntity<String>(routeDB.toJson(), headers, HttpStatus.OK);
+		 LoggedRoute routeDB = routeService.insert(routeClient);
+		 if(routeDB != null){
+			 return new ResponseEntity<String>(routeDB.toJson(), headers, HttpStatus.OK);
+		 }
+		 return new ResponseEntity<String>("Route not Saved! ", headers, HttpStatus.BAD_REQUEST);
+		 
 	}
+	/**
+	  * Functionality: show Routes of specified User = Find Routes of specified User in Database
+	  * Serveraddress:8080/routemanagement/showRoutePerUser
+	  * 
+	  * @param routeJson - JsonString request from Client - RequestMethod = POST
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  */
+	
 	@RequestMapping(value="/showRoutePerUser", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> showRoutePerUser(@RequestBody String routeJson){ 
 		
-		 HttpHeaders headers = new HttpHeaders();
-	     headers.add("Content-Type", "application/json; charset=utf-8");
-	     
 		 LoggedRoute routeClient = new JSONDeserializer<LoggedRoute>().deserialize(routeJson, LoggedRoute.class );
 		 
 		 List<LoggedRoute> routeDBList = routeService.findByUsername(routeClient.getUserName());
 		 
-		 if(routeDBList == null){
-			 return new ResponseEntity<String>(" Route not found! ", headers, HttpStatus.NOT_FOUND);
+		 if(routeDBList.isEmpty()){
+			 return new ResponseEntity<String>(" Routes not found! ", headers, HttpStatus.NOT_FOUND);
 		 }
 		 
 		 
 		 return new ResponseEntity<String>(LoggedRoute.toJsonArray(routeDBList), headers, HttpStatus.OK);
 		 
 	}
+	/**
+	  * Functionality: delete Route = Delete Route in Database
+	  * Serveraddress:8080/routemanagement/deleteRoute
+	  * 
+	  * @param routeJson - JsonString request from Client - RequestMethod = POST
+	  * @throws RouteNotFound if specified Route not found in Database @see @see at.compare.service.RouteServiceImpl#delete(Long)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  */
 	@RequestMapping(value="/deleteRoute", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> deleteRoute(@RequestBody String routeJson){ 
-		
-		 HttpHeaders headers = new HttpHeaders();
-	     headers.add("Content-Type", "application/json; charset=utf-8");
-	     
+	public @ResponseBody ResponseEntity<String> deleteRoute(@RequestBody String routeJson) throws RouteNotFound{ 
+		 
 		 LoggedRoute routeClient = new JSONDeserializer<LoggedRoute>().deserialize(routeJson, LoggedRoute.class );
 		 
 		 List<LoggedRoute> routeTmpList =  routeService.findByUsername(routeClient.getUserName()); 
 		 
-		 if(routeTmpList == null){
+		 if(routeTmpList.isEmpty()){
 				return new ResponseEntity<String>(" Route not found!* ", headers, HttpStatus.NOT_FOUND);
 		 }
 		 
@@ -118,49 +180,48 @@ public class RouteManagement {
 			return new ResponseEntity<String>(" Route not found!** ", headers, HttpStatus.NOT_FOUND);
 		}
 		 
-		LoggedRoute routeDB = null;
-		try {
-			routeDB = routeService.delete(route.getId());
-		} catch (RouteNotFound e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 
-		 if(routeDB == null){
-			 return new ResponseEntity<String>(" Route not found! ", headers, HttpStatus.NOT_FOUND);
-		 }
-		 
-		 return new ResponseEntity<String>(routeDB.toJson(), headers, HttpStatus.OK);
+		LoggedRoute routeDB = routeService.delete(route.getId());
 		
-	     //return new ResponseEntity<String>(" NOT IMPLEMENTED!! ", headers, HttpStatus.NOT_FOUND);
+		if(routeDB != null){
+			 return new ResponseEntity<String>(routeDB.toJson(), headers, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(" Route not found!*** " + routeClient.getDate() + route.getDate(), headers, HttpStatus.NOT_FOUND);
+		 
+		
 	}
-	
+	/**
+	 * Functionality: delete Routes = Delete Routes in Database with specified Username
+	 * Serveraddress:8080/routemanagement/deleteRoutesWithUsername
+	 * @param routeJson - JsonString request from Client - RequestMethod = POST
+	 * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	 */
 	@RequestMapping(value="/deleteRoutesWithUsername", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> deleteRoutesWithUsername(@RequestBody String routeJson){ 
-		
-		 HttpHeaders headers = new HttpHeaders();
-	     headers.add("Content-Type", "application/json; charset=utf-8");
 	     
 		 LoggedRoute routeClient = new JSONDeserializer<LoggedRoute>().deserialize(routeJson, LoggedRoute.class );
 		 
-		 List<LoggedRoute> routeTmpList =  routeService.findByUsername(routeClient.getUserName()); 
-		 if(routeTmpList == null){
-				return new ResponseEntity<String>(" Route not found! ", headers, HttpStatus.NOT_FOUND);
+		 if(routeClient == null){
+			 return new ResponseEntity<String>(" Route Object not Valid! ", headers, HttpStatus.BAD_REQUEST);
 		 }
 		 
-		for(LoggedRoute tmp: routeTmpList){
+		 List<LoggedRoute> routeTmpList =  routeService.findByUsername(routeClient.getUserName()); 
+		 if(routeTmpList.isEmpty()){
+				return new ResponseEntity<String>("Route not found! ", headers, HttpStatus.NOT_FOUND);
+		 }
+		 LoggedRoute result = null;
+		 for(LoggedRoute tmp: routeTmpList){
 			
 			try {
-				routeService.delete(tmp.getId());
+				result = routeService.delete(tmp.getId());
 			} catch (RouteNotFound e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 			}
-		}
- 
-		 return new ResponseEntity<String>("Deleted Routes of User: " + routeClient.getUserName(), headers, HttpStatus.OK);
-		
-	    
+		 }
+		 if(result != null){
+			 return new ResponseEntity<String>("Deleted Routes of User: " + routeClient.getUserName(), headers, HttpStatus.OK);
+		 }
+		 return new ResponseEntity<String>("No User Deleted!", headers, HttpStatus.NOT_FOUND);
 	}
 	/*
 	@RequestMapping(value="/showCO2", method = RequestMethod.POST)
