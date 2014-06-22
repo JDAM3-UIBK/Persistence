@@ -1,47 +1,49 @@
 package at.compare.controller;
 
 import java.io.IOException;
-import java.util.List;
+
 
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import at.compare.model.Auto;
-import at.compare.model.User;
-import at.compare.repository.AutoRepository;
 import at.compare.repository.RouteRepository;
 import at.compare.service.AutoService;
-import at.compare.service.AutoServiceImpl;
 import at.compare.service.UserService;
 
+/**
+ * @author Joachim Rangger
+ * The Class is responsible for showing start home page
+ * and testing functionality
+*/
 @Controller
-//@Configuration
-//@ComponentScan("at.compare")
 public class LinkController {
-	
+	/**
+	 * @see at.compare.service.AutoService
+	 */
 	@Autowired
 	AutoService autoService;
-	
+	/**
+	 * @see at.compare.service.UserService
+	 */
 	@Autowired
 	UserService userService;
 	
+	/**
+	 * @see at.compare.service.RouteRepository
+	 */
 	@Autowired
 	RouteRepository routeRepository;
 	
+	/**
+	 * @see at.compare.init.WebAppConfig
+	 */
 	@RequestMapping(value="/")
 	public ModelAndView test(HttpServletResponse response) throws IOException{
 		return new ModelAndView("home");
 	}
-	
+	/*
 	@RequestMapping(value="/test")
 	public @ResponseBody String test(){
 		//Auto auto = autoService.findById(1);
@@ -67,8 +69,8 @@ public class LinkController {
 		return auto;
 	}
 	//insert value
-	
-	
+	*/
+	/*
 	// Bsp: http://localhost:8080/cp414/autoid?id=2 
 	@RequestMapping(value="/autoid", method=RequestMethod.GET)
 	public @ResponseBody String id(@RequestParam(value="id", required=false, defaultValue="1" )long id){
@@ -77,7 +79,7 @@ public class LinkController {
 		
 		return auto.toString();
 	}
-	
+	*/
 	
 	/*
 	@RequestMapping(value="/list", method=RequestMethod.GET)

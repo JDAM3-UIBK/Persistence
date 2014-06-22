@@ -22,8 +22,15 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import at.compare.model.LoggedRoute;
 import at.compare.model.LoggedRouteValidator;
-
-
+/**
+ * 
+ * Spring MVC Framework Configuration for Data Access from and to Database
+ * ComponentScan looks in Packages for Controllers
+ * EnableJpaRepositories looks for repositories 
+ * In Repositories Data from Database is saved 
+ * 
+ * @author Joachim Rangger
+ */
 
 @Configuration
 @EnableWebMvc
@@ -31,7 +38,10 @@ import at.compare.model.LoggedRouteValidator;
 @EnableJpaRepositories("at.compare.repository")
 public class WebAppConfig extends WebMvcConfigurerAdapter{
 	
-	
+	/**
+	 * Initialize Connection to Database
+	 * @return  DriverManagerDataSource dataSource 
+	 */
 	@Bean
     public DataSource dataSource() {
         
@@ -44,6 +54,14 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
         return dataSource;
     }
 	
+	/**
+	 * setDataSource @see #dataSource()
+	 * PackagesToScan look for Entities: @see at.compare.model.User and @see at.compare.model.LoggedRoute 
+	 * vendorAdapter: set Hibernate as persistence framework
+	 * vendorAdapter.setGenerateDdl: Generates hibernate.hbm2ddl
+	 * 
+	 * @return EntityManagerFactory factory.getObject()
+	 */
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 
@@ -57,7 +75,13 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 	    factory.afterPropertiesSet();
 	    
 	    return factory.getObject();
+	    
 	}
+	
+	/**
+	 * Manager for Entity interaction with Database
+	 * @return JpaTransactionManager txManager
+	 */
 	 @Bean
 	 public PlatformTransactionManager transactionManager() {
 
@@ -65,12 +89,20 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 	    txManager.setEntityManagerFactory(entityManagerFactory());
 	    return txManager;
 	 }
+	 
+	 /**
+	  * Important, without Hibernate does not work
+	  * @return HibernateExceptionTranslator
+	  */
 	 @Bean 
 	 public HibernateExceptionTranslator hibernateExceptionTranslator(){ 
 	      return new HibernateExceptionTranslator(); 
 	 }
 	
-	
+	/**
+	 * Path to JSP Directory
+	 * @return ViewResolver 
+	 */
 	@Bean
 	public ViewResolver getViewResolver(){
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -78,6 +110,10 @@ public class WebAppConfig extends WebMvcConfigurerAdapter{
 		resolver.setSuffix(".jsp");
 		return resolver;
 	}
+	
+	/**
+	 * @return HttpHeader: "Content-Type", "application/json; charset=utf-8"
+	 */
 	@Bean
 	public HttpHeaders headers(){
 		HttpHeaders tmp = new HttpHeaders();

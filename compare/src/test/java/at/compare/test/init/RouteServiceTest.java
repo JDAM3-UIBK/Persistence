@@ -1,10 +1,7 @@
 package at.compare.test.init;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.Matchers.*;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -16,17 +13,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
+
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -35,12 +32,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
-
 import at.compare.exception.RouteNotFound;
 import at.compare.init.WebAppConfig;
-import at.compare.model.Auto;
+
 import at.compare.model.LoggedRoute;
 import at.compare.model.User;
 import at.compare.service.RouteService;
@@ -78,9 +72,6 @@ public class RouteServiceTest {
 	@Autowired
 	@Qualifier("userService")
 	private UserService userServiceMock;
-	
-	//@Autowired
-	//Date date;
 	
 	@Autowired
 	private WebApplicationContext webApplicationContext;

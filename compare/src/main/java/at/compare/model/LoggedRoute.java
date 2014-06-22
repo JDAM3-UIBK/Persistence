@@ -16,14 +16,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import flexjson.JSONSerializer;
 
 /**
- * This class is only an example of JsonClass to help 
- * writing the parser. If it already exists on the server
- * delete that class.
- * p.s. check if this class is the same as on the server.
- * I added the userName.
- * 
+ * Entity Representation of LoggedRoute in Database
  * @author Manuel Kapferer
- *
+ * 
  */
 
 @Entity

@@ -2,7 +2,7 @@ package at.compare.model;
 
 /**
  * This class which represents our
- * Costumer/user entity, in annotation form.
+ * user entity, in annotation form.
  * @author Manuel Kapferer
  *
  */
@@ -34,7 +34,7 @@ public class User implements Serializable{
 	}
 
 	/**
-	 * constructor to create a costumer
+	 * constructor to create a User
 	 * @param user_name_id 
 	 * 			user nickname
 	 * @param user_pw 

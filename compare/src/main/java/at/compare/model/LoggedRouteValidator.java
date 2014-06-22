@@ -1,8 +1,13 @@
 package at.compare.model;
 
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
+/**
+ * 
+ * @author Joachim Rangger
+ * Validation of LoggedRoute
+ */
 
 public class LoggedRouteValidator implements Validator{
 	
