@@ -15,9 +15,9 @@ import at.compare.exception.UserNotFound;
 import at.compare.model.User;
 import at.compare.service.UserService;
 /**
- * 
- * @author Joachim Rangger
  * Serveraddress:8080/usermanagement
+ * @author Joachim Rangger
+ * 
  */
 
 @Controller
@@ -42,7 +42,7 @@ public class UserManagement {
 	 * Only for Testing Functionality
 	 * Serveraddress:8080/usermanagement/jsonTest/{id}
 	 * @param id of User
-	 * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	 * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	 */
 	 @RequestMapping(value = "/jsonTest/{id}", headers = "Accept=application/json")
 	
@@ -61,7 +61,7 @@ public class UserManagement {
 	  * Serveraddress:8080/usermanagement/Register
 	  * 
 	  * @param userJson - JsonString request from Client - RequestMethod = POST
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  */
 	 @RequestMapping(value="/Register", method = RequestMethod.POST)
 	 public @ResponseBody ResponseEntity<String> registerUser(@RequestBody String userJson){
@@ -88,7 +88,7 @@ public class UserManagement {
 	  * Serveraddress:8080/usermanagement/Anmelden
 	  * 
 	  * @param userJson - JsonString request from Client - RequestMethod = POST
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  */
 	 
 	 @RequestMapping(value="/Anmelden" ,method = RequestMethod.POST)
@@ -117,7 +117,7 @@ public class UserManagement {
 	  * Serveraddress:8080/usermanagement/Delete
 	  * 
 	  * @param userJson - JsonString request from Client - RequestMethod = POST
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  * @throws UserNotFound if User not found in Database @see at.compare.service.UserServiceImpl#delete(String)
 	  */
 	 
@@ -145,7 +145,7 @@ public class UserManagement {
 	  * Serveraddress:8080/usermanagement/changePassword
 	  * 
 	  * @param userJson - JsonString request from Client - RequestMethod = POST
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  * @throws UserNotFound if User not found in Database @see at.compare.service.UserServiceImpl#update(User)
 	  */
 	 @RequestMapping(value="/changePassword", method = RequestMethod.POST)

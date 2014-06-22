@@ -31,7 +31,7 @@ public class RouteServiceImpl implements RouteService{
 	
 	/**
 	 * @param route - save LoggedRoute to Database
-	 * @return {@link at.compare.repository.RouteRepository#save(LoggedRoute)}
+	 * @return at.compare.repository.RouteRepository#save(LoggedRoute)
 	 */
 	
 	@Override
@@ -42,9 +42,9 @@ public class RouteServiceImpl implements RouteService{
 		return routeRepository.save(createdRoute);
 	}
 	/**
-	 * @param route - delete LoggedRoute from Database, with given Route id
-	 * @throws at.compare.exception.RouteNotFound
-	 * @return {@link at.compare.repository.RouteRepository#findOne(Long)}
+	 * @param route_id - delete LoggedRoute from Database, with given Route id
+	 * @throws at.compare.exception.RouteNotFound Routeno
+	 * @return at.compare.repository.RouteRepository#findOne(Long)
 	 */
 	
 	@Override
@@ -59,8 +59,8 @@ public class RouteServiceImpl implements RouteService{
 		return deletedRoute;
 	}
 	/**
-	 * @param route_id
-	 * @return {@link at.compare.repository.RouteRepository#findOne(Long)}
+	 * @param route_id id of Logged Route
+	 * @return at.compare.repository.RouteRepository#findOne(Long)
 	 */
 	
 	@Override
@@ -72,8 +72,8 @@ public class RouteServiceImpl implements RouteService{
 	
 	/**
 	 * @param route - update LoggedRoute in Database
-	 * @throws at.compare.exception.RouteNotFound
-	 * @return {@link at.compare.repository.RouteRepository#findOne(Long)}
+	 * @throws at.compare.exception.RouteNotFound if Route not found
+	 * @return at.compare.repository.RouteRepository#findOne(Long)
 	 */
 	@Override
 	@Transactional(rollbackFor=RouteNotFound.class)
@@ -98,7 +98,7 @@ public class RouteServiceImpl implements RouteService{
 	}
 	/**
 	 * find all saved Routes in Database
-	 * @return {@link at.compare.repository.RouteRepository#findAll()}
+	 * @return at.compare.repository.RouteRepository#findAll()
 	 */
 	@Override
 	@Transactional
@@ -109,7 +109,7 @@ public class RouteServiceImpl implements RouteService{
 	
 	/**
 	 * @param username - look for Route with given username
-	 * @return {@link at.compare.repository.RouteRepository#findByUserName(String)}
+	 * @return at.compare.repository.RouteRepository#findByUserName(String)
 	 */
 	
 	@Override

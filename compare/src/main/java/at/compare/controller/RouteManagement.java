@@ -24,9 +24,9 @@ import at.compare.service.RouteService;
 import at.compare.service.UserService;
 
 /**
- * 
- * @author Joachim Rangger
  * Serveraddress:8080/routemanagement
+ * @author Joachim Rangger
+ * 
  */
 
 @Controller
@@ -59,10 +59,10 @@ public class RouteManagement {
 	  * Serveraddress:8080/routemanagement/findRouteWithId
 	  * 
 	  * @param id - Request from Client with value="id"- RequestMethod = POST/GET
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  */
 	@RequestMapping(value="/findRouteWithId")
-	public @ResponseBody ResponseEntity<String> id(@RequestParam(value="id", required=false, defaultValue="1" )Long id) throws RouteNotFound{
+	public @ResponseBody ResponseEntity<String> id(@RequestParam(value="id", required=false, defaultValue="1" )Long id){
 		
 		LoggedRoute loggedRoute = routeService.findById(id);
 		
@@ -81,10 +81,10 @@ public class RouteManagement {
 	  * Serveraddress:8080/routemanagement/username
 	  * 
 	  * @param username - String request from Client - RequestMethod = POST
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  */
 	@RequestMapping(value="/username", method=RequestMethod.POST)
-	public @ResponseBody ResponseEntity<String> username(@RequestBody String username) throws RouteNotFound{
+	public @ResponseBody ResponseEntity<String> username(@RequestBody String username){
 		
 		List<LoggedRoute> routeDBList = routeService.findByUsername(username);
 		
@@ -100,11 +100,11 @@ public class RouteManagement {
 	  * Serveraddress:8080/routemanagement/saveRoute
 	  * 
 	  * @param routeJson - JsonString request from Client - RequestMethod = POST
-	  * @param routeClient  @see at.compare.model.LoggedRouteValidator  
+	  * @param routeClient  LoggedRouteValidator  @see at.compare.model.LoggedRouteValidator  
 	  *
 	  * @param result for Validation Error handling 
 	  * 
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  * 
 	  */
 	
@@ -133,7 +133,7 @@ public class RouteManagement {
 	  * Serveraddress:8080/routemanagement/showRoutePerUser
 	  * 
 	  * @param routeJson - JsonString request from Client - RequestMethod = POST
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  */
 	
 	@RequestMapping(value="/showRoutePerUser", method = RequestMethod.POST)
@@ -157,7 +157,7 @@ public class RouteManagement {
 	  * 
 	  * @param routeJson - JsonString request from Client - RequestMethod = POST
 	  * @throws RouteNotFound if specified Route not found in Database @see @see at.compare.service.RouteServiceImpl#delete(Long)
-	  * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	  * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	  */
 	@RequestMapping(value="/deleteRoute", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> deleteRoute(@RequestBody String routeJson) throws RouteNotFound{ 
@@ -193,7 +193,7 @@ public class RouteManagement {
 	 * Functionality: delete Routes = Delete Routes in Database with specified Username
 	 * Serveraddress:8080/routemanagement/deleteRoutesWithUsername
 	 * @param routeJson - JsonString request from Client - RequestMethod = POST
-	 * @return ResponseEntity<String>(user as JsonString or String, HttpHeader=Json, HttpStatus)
+	 * @return ResponseEntity(user as JsonString or String, HttpHeader=Json, HttpStatus)
 	 */
 	@RequestMapping(value="/deleteRoutesWithUsername", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> deleteRoutesWithUsername(@RequestBody String routeJson){ 

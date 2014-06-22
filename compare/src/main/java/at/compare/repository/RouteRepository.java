@@ -19,7 +19,7 @@ public interface RouteRepository extends JpaRepository<LoggedRoute, Long>{
 	 * 
 	 * @param userName select all Routes with specified username = ?1
 	 * select r from LoggedRoute r where r.userName = ?1
-	 * @return List<LoggedRoute> of all found Routes
+	 * @return List of all found Routes
 	 */
 	public List<LoggedRoute> findByUserName(String userName);
 }

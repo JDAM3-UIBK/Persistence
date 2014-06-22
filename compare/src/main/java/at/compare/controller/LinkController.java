@@ -38,6 +38,9 @@ public class LinkController {
 	
 	/**
 	 * @see at.compare.init.WebAppConfig
+	 * @param response jsp file
+	 * @throws IOException wrong input
+	 * @return ModelAndView
 	 */
 	@RequestMapping(value="/")
 	public ModelAndView test(HttpServletResponse response) throws IOException{

@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService{
 	
 	/**
 	 * @param user - save User to Database
-	 * @return {@link at.compare.repository.UserRepository#save(User)}
+	 * @return at.compare.repository.UserRepository#save(User)
 	 */
 	@Override
 	@Transactional
@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	/**
-	 * @param user - look for User in Database with username
-	 * @return {@link at.compare.repository.UserRepository#findOne(String)}
+	 * @param nameId - look for User in Database with username
+	 * @return at.compare.repository.UserRepository#findOne(String)
 	 */
 	@Override
 	@Transactional
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService{
 	
 	/**
 	 * find all Users in Database
-	 * @return {@link at.compare.repository.UserRepository#findAll()}
+	 * @return at.compare.repository.UserRepository#findAll()
 	 */
 	@Override
 	@Transactional
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService{
 	 * @param user_name_id - delete User from Database, with given username
 	 * @throws at.compare.exception.UserNotFound
 	 * 
-	 * {@link at.compare.repository.UserRepository#findOne(String)}
+	 * at.compare.repository.UserRepository#findOne(String)
 	 * 
 	 * @return user 
 	 */
@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	/**
-	 * @param updatedUser - update User in Database
+	 * @param user - update User in Database
 	 * @throws at.compare.exception.UserNotFound
 	 * 
-	 * {@link at.compare.repository.UserRepository#findOne(String)}
+	 * at.compare.repository.UserRepository#findOne(String)
 	 * 
-	 * @return {@link at.compare.repository.UserRepository#save(User)}
+	 * @return at.compare.repository.UserRepository#save(User)
 	 */
 	@Override
 	@Transactional(rollbackFor=UserNotFound.class)
