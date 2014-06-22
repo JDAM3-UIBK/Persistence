@@ -33,7 +33,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import at.compare.exception.RouteNotFound;
-import at.compare.init.WebAppConfig;
 
 import at.compare.model.LoggedRoute;
 import at.compare.model.User;
@@ -42,7 +41,7 @@ import at.compare.service.UserService;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestContext.class, WebAppConfig.class})
+@ContextConfiguration(classes = {TestContext.class, WebAppConfigTest.class})
 @WebAppConfiguration
 public class RouteServiceTest {
 	

@@ -7,8 +7,11 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.BeforeTransaction;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -17,18 +20,20 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.*;
 import at.compare.exception.UserNotFound;
-import at.compare.init.WebAppConfig;
 import at.compare.model.User;
 import at.compare.service.UserService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestContext.class, WebAppConfig.class})
-@WebAppConfiguration
 
+//@TransactionConfiguration(transactionManager="transactionManager", defaultRollback=false)
+//@Transactional
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {TestContext.class, WebAppConfigTest.class})
+@WebAppConfiguration
 public class UserServiceTests {
 	
 	//http://docs.spring.io/spring/docs/3.0.0.M3/reference/html/ch10s03.html
@@ -60,9 +65,15 @@ public class UserServiceTests {
 		resultNotAcceptable = MockMvcResultMatchers.status().isNotAcceptable();
 		resultNotFound = MockMvcResultMatchers.status().isNotFound();
 		
+	}/*
+	@BeforeTransaction
+	public void beforeTransaction(){
+		User userDB = new User("jochen","2432");
+		when(userServiceMock.findByNameId("jochen")).thenReturn(userDB);
 	}
-	
-	@Test
+	*/
+	//@Rollback(false)
+	@Test 
 	public void userAnmeldenTest(){
 		User userDB = new User("jochen","2432");
 		String jsonTest = userDB.toJson();
@@ -128,6 +139,7 @@ public class UserServiceTests {
 			e.printStackTrace();
 		}
 	}
+	
 	@Test	
 	public void userRegisterTest2(){	
 		
@@ -149,6 +161,7 @@ public class UserServiceTests {
 			e.printStackTrace();
 		}
 	}
+	
 	@Test
 	public void userDeleteTest(){
 		
