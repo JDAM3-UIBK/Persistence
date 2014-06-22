@@ -27,7 +27,10 @@ import at.compare.model.LoggedRouteValidator;
  * Spring MVC Framework Configuration for Data Access from and to Database
  * ComponentScan looks in Packages for Controllers
  * EnableJpaRepositories looks for repositories 
- * In Repositories Data from Database is saved 
+ * In Repositories Data from Database is saved
+ * !!!Only for Testing!!!
+ * Original at:
+ * @see at.compare.init.WebAppConfig 
  * 
  * @author Joachim Rangger
  */
@@ -54,7 +57,16 @@ public class WebAppConfigTest extends WebMvcConfigurerAdapter{
         
         return dataSource;
     }
-
+	
+	/**
+	 * setDataSource @see #dataSource()
+	 * PackagesToScan look for Entities: @see at.compare.model.User and @see at.compare.model.LoggedRoute 
+	 * vendorAdapter: set Hibernate as persistence framework
+	 * vendorAdapter.setGenerateDdl: Generates hibernate.hbm2ddl
+	 * 
+	 * @return EntityManagerFactory factory.getObject()
+	 */
+	
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 
